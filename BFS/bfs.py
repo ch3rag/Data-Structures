@@ -1,42 +1,38 @@
 from collections import deque
-
 graph = {}
-graph["START"] = ["A","B"]
-graph["A"]     = ["C","FINISH"]
-graph["B"]     = ["C", "D"]
-graph["C"]	   = ["E"]
-graph["D"]	   = ["FINISH"]
-graph["FINISH"]	   = []
-graph["E"]         = []
 
+graph["START"] = ["A", "B"]
 
+graph["A"] = ["FINISH"]
 
-def BFS (startingNode, destinationNode) :
-	queue = deque()
-	cameFrom = {}
+graph["B"] = ["A", "FINISH"]
+
+graph["FINISH"] = []
+
+def BFS(starting_node, destination_node) :
 	searched = []
-	queue += graph[startingNode]
-	cameFrom[startingNode] = None
-	for n in graph[startingNode] :
-		cameFrom[n] = startingNode
+	cameFrom = {}
+	queue    = deque()
+	cameFrom[starting_node] = None
+	for n in graph[starting_node] :
+		cameFrom[n] = starting_node
+	queue += graph[starting_node]
 	while queue :
 		node = queue.popleft()
-		if not node in searched :
-			if node == destinationNode :
+		if node not in searched :
+			if node == destination_node :
 				path = []
-				while not node == None :
+				while node :
 					path.append(node)
 					node = cameFrom[node]
 				path.reverse()
 				return path
-
 			else :
 				for n in graph[node] :
-					cameFrom[n] = node
+					if not cameFrom.get(n) :
+						cameFrom[n] = node
 				queue += graph[node]
 				searched.append(node)
-	return []			
-
-
-print BFS("START", "FINISH")
-print BFS("START", "E")
+	return []
+	
+print BFS ("START", "FINISH")					
